@@ -1,0 +1,54 @@
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+let data = [64, 3, 59, 2, 5, 9, 99, 11, 6];
+
+function BubbleSort(props) {
+  for (var i = 0; i < props.length; i++) {
+    for (var j = 0; j < props.length; j++) {
+      if (props[i] > props[j]) {
+        // await wait(50);
+        let temp = props[i];
+        props[i] = props[j];
+        props[j] = temp;
+
+        // console.log(props); // rendered each itteration
+      }
+    }
+  }
+  let reversed = props.reverse();
+
+  return reversed;
+}
+
+const Homepage = () => {
+  const [results, setResults] = useState(data);
+  const [check, setCheck] = useState(1);
+
+  function display(props) {
+    return props.map((num) => {
+      return <p key={Math.random()}>{num}</p>;
+    });
+  }
+
+  useEffect(() => {
+    console.log("check updated");
+  }, [check]);
+
+  // console.log(results);
+  return (
+    <>
+      <h1>Sorting Visualizer</h1>
+      <button onClick={() => setResults([0, 5])}>true</button>
+      <button onClick={() => setResults([0, 8])}>false</button>
+
+      <ul>{display(results)}</ul>
+    </>
+  );
+};
+
+export default Homepage;

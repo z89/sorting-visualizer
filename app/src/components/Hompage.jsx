@@ -1,38 +1,61 @@
-const arr = [1, 2, 8, 4, 5, 3, 20, 50, 100, 15, 12, 99, 1500, 293, 495911, 3, 5];
-const sleep = (milliseconds) => {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
+import React, { useState, useEffect } from "react";
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function BubbleSort(props, i) {
+  await wait(1000);
+  for (var j = 0; j < props.length; j++) {
+    if (props[i] > props[j]) {
+      let temp = props[i];
+      props[i] = props[j];
+      props[j] = temp;
+
+      // console.log(props); // rendered each itteration
+    }
+  }
+
+  return props;
+}
 
 const Homepage = () => {
-  async function handleClick() {
-    let temp = arr;
+  let [data, setData] = useState([64, 43, 59, 25, 59, 62, 34, 15, 68]);
 
-    let len = temp.length;
-    let checked;
-    do {
-      checked = false;
-      for (let i = 0; i < len; i++) {
-        await sleep(250);
-        console.log(arr);
-        if (temp[i] > temp[i + 1]) {
-          let tmp = temp[i];
-          temp[i] = temp[i + 1];
-          temp[i + 1] = tmp;
-          checked = true;
-        }
-      }
-    } while (checked);
+  useEffect(() => {
+    console.log("array updated");
+    console.log(data);
+  }, [data]);
 
-    await sleep(2000); //wait 5 seconds
-    console.log(arr);
-  }
+  let current = data.map((item, index) => {
+    // console.log(index + ": " + data[index]);
+
+    // console.log();
+    return (
+      <div
+        id={index}
+        style={{ backgroundColor: "blue", marginBottom: "10px", width: item + "%", height: "25px" }}
+        key={index}
+      >
+        {item}
+      </div>
+    );
+  });
 
   return (
     <>
-      <div className="home">
-        <h1>sada</h1>
-        <button onClick={handleClick}>Click me</button>
-      </div>
+      <h1>Sorting Visualizer</h1>
+      <button
+        onClick={async () => {
+          for (var i = 0; i < data.length; i++) {
+            setData([...(await BubbleSort(data, i))]);
+          }
+        }}
+      >
+        sort
+      </button>
+
+      <div>{current}</div>
     </>
   );
 };
