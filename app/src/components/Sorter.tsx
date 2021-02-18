@@ -1,10 +1,16 @@
 import React, { useState, useLayoutEffect } from "react";
 
-function wait(ms) {
+function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function BubbleSort(props) {
+type Div = {
+  className: string;
+  val: number;
+  key: number;
+};
+
+async function BubbleSort(props: number[]) {
   for (var i = 0; i < props.length; i++) {
     await wait(20);
     if (props[i] > props[i + 1]) {
@@ -14,14 +20,13 @@ async function BubbleSort(props) {
       props[i] = props[i + 1];
       props[i + 1] = temp;
     }
-
     console.log(props);
   }
   return props;
 }
 
-function Div(props) {
-  const { onChange, className, val } = props;
+function Bar(props: Div) {
+  const { className, val } = props;
 
   return (
     <div
@@ -35,19 +40,19 @@ function Div(props) {
       onClick={() => {
         console.log("div clicked");
       }}
-      onChange={onChange}
+      // onChange={onChange}
     >
       <p>{val}</p>
     </div>
   );
 }
 
-function displayDivs(props) {
-  return props.map((item) => <Div className={"div-" + item} val={item} key={Math.random()} />);
+function displayDivs(props: number[]) {
+  return props.map((item) => <Bar className={"div-" + item} val={item} key={Math.random()} />);
 }
 
-const Homepage = () => {
-  let [data, setData] = useState([43, 59, 15, 51, 12, 93, 12, 93, 86, 40, 10, 8, 76, 37, 48, 46]);
+const Sorter = () => {
+  let [data, setData] = useState<number[]>([43, 59, 15, 51, 12, 93, 12, 93, 86, 40, 10, 8, 76, 37, 48, 46]);
 
   useLayoutEffect(() => {
     console.log("array updated");
@@ -59,15 +64,22 @@ const Homepage = () => {
       <button
         onClick={async () => {
           console.log("start sorting..");
-
           for (var i = 0; i < data.length; i++) {
             setData([...(await BubbleSort(data))]);
           }
-
           console.log("finished sorting");
         }}
       >
         sort
+      </button>
+      <button
+        onClick={async () => {
+          console.log("resetting..");
+          setData([43, 59, 15, 51, 12, 93, 12, 93, 86, 40, 10, 8, 76, 37, 48, 46]);
+          console.log("finished resetting");
+        }}
+      >
+        reset
       </button>
 
       {displayDivs(data)}
@@ -75,4 +87,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default Sorter;
