@@ -20,9 +20,10 @@ html {
 .active {
   background-color: greenyellow !important;
 }
-.first {
+.active-2 {
   background-color: purple !important;
 }
+
 .App {
   position: absolute;
   top: 0;

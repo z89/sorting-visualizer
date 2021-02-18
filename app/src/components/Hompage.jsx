@@ -1,133 +1,78 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-let selected, pressed;
-async function BubbleSort(props) {
-  // for (var j = 0; j < props.length; j++) {
-  //   await wait(100);
-  //   if (props[i] > props[j]) {
-  //     let temp = props[i];
-  //     props[i] = props[j];
-  //     props[j] = temp;
 
-  //     // console.log(props); // rendered each itteration
-  //   }
-  // }
+async function BubbleSort(props) {
   for (var i = 0; i < props.length; i++) {
-    document.getElementsByClassName(props[i]).style += { backgroundColor: "green" };
-    await wait(100);
+    await wait(20);
     if (props[i] > props[i + 1]) {
-      selected = props[i];
+      document.getElementsByClassName("div-" + props[i])[0].classList.add("active");
+      // console.log("first: " + props[i] + " second: " + props[i + 1]);
       let temp = props[i];
       props[i] = props[i + 1];
       props[i + 1] = temp;
     }
+
     console.log(props);
   }
-
   return props;
 }
 
-// backgroundColor: "blue",
-//   //         marginBottom: "10px",
-//   //         width: item + "%",
-//   //         height: "25px",
+function Div(props) {
+  const { onChange, className, val } = props;
 
-function Book(props) {
-  const { div, onClick, selectedChoice } = props;
-  console.log(selectedChoice);
   return (
     <div
+      className={className}
       style={{
         backgroundColor: "blue",
         marginBottom: "10px",
-        width: div + "%",
+        width: val + "%",
         height: "25px",
       }}
       onClick={() => {
         console.log("div clicked");
       }}
+      onChange={onChange}
     >
-      <p>{div}</p>
+      <p>{val}</p>
     </div>
   );
 }
 
-const Homepage = () => {
-  let [data, setData] = useState([64, 43, 59, 15, 59, 12, 34, 68]);
-  const [selectedAnswer, setAnswer] = useState();
+function displayDivs(props) {
+  return props.map((item) => <Div className={"div-" + item} val={item} key={Math.random()} />);
+}
 
-  useEffect(() => {
+const Homepage = () => {
+  let [data, setData] = useState([43, 59, 15, 51, 12, 93, 12, 93, 86, 40, 10, 8, 76, 37, 48, 46]);
+
+  useLayoutEffect(() => {
     console.log("array updated");
-    // console.log("selected: " + selected);
-    // console.log(data);
   }, [data]);
 
   return (
     <>
-      <h1>Sorting Visualizer</h1>
+      <h1>Sorting Visualizer [Bubble Sort] (Not Completed)</h1>
       <button
         onClick={async () => {
-          console.log("start");
-          pressed = true;
+          console.log("start sorting..");
+
           for (var i = 0; i < data.length; i++) {
-            setData([...(await BubbleSort(data, i))]);
-            // document.getElementsByClassName(selected).style.color += "red";
-            console.log(selected);
+            setData([...(await BubbleSort(data))]);
           }
-          console.log("finished");
-          pressed = false;
+
+          console.log("finished sorting");
         }}
       >
         sort
       </button>
-      {data.map((item) => (
-        <Book div={item} onClick={(selectedAnswer) => setAnswer(selectedAnswer)} selectedChoice={selectedAnswer} />
-      ))}
+
+      {displayDivs(data)}
     </>
   );
-
-  // let current = data.map((item, index) => {
-  //   return (
-  //     <div
-  //       className={selected === this.key ? "active" : ""}
-  //       style={{
-  //         backgroundColor: "blue",
-  //         marginBottom: "10px",
-  //         width: item + "%",
-  //         height: "25px",
-  //       }}
-  //       key={index}
-  //     >
-  //       {item}
-  //     </div>
-  //   );
-  // });
-
-  // return (
-  //   <>
-  //     <h1>Sorting Visualizer</h1>
-  //     <button
-  //       onClick={async () => {
-  //         console.log("start");
-  //         pressed = true;
-  //         for (var i = 0; i < data.length; i++) {
-  //           setData([...(await BubbleSort(data, i))]);
-  //           // document.getElementsByClassName(selected).style.color += "red";
-  //           console.log(selected);
-  //         }
-  //         console.log("finished");
-  //         pressed = false;
-  //       }}
-  //     >
-  //       sort
-  //     </button>
-
-  //     <div>{current}</div>
-  //   </>
-  // );
 };
 
 export default Homepage;
